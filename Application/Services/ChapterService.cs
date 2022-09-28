@@ -13,6 +13,7 @@ namespace Application.Services
     public interface IChapterService
     {
         Task<GetChapterResponseModel> GetChaptersByActive(int active);
+        Task<PostChapterResponseModel> SaveNewChapter(Chapter chapter);
     }
     public class ChapterService : IChapterService
     {
@@ -21,19 +22,25 @@ namespace Application.Services
         {
             justiceDbContext = context;
         }
+
+        public async Task<PostChapterResponseModel> SaveNewChapter(Chapter chapter)
+        {
+
+            var result = await justiceDbContext.Chapters.AddAsync(chapter);
+            var response = await justiceDbContext.SaveChangesAsync();
+
+            return new PostChapterResponseModel() { Id = response };
+        }
+
         public async Task<GetChapterResponseModel> GetChaptersByActive(int active)
         {
-            /*using(JusticeDbContext justiceDbContext = new JusticeDbContext())
-            {*/
-                var result = await justiceDbContext.Chapters.ToListAsync();
-                var result2 = justiceDbContext.Articles.ToList().FirstOrDefault();
-                //Console.WriteLine(result2.Chapter.Description);
-                return new GetChapterResponseModel()
-                {
-                    Chapters = (List<Chapter>)result
-                };
-
-           // }
+            var result = await justiceDbContext.Chapters.ToListAsync();
+            var result2 = justiceDbContext.Articles.ToList().FirstOrDefault();
+            
+            return new GetChapterResponseModel()
+            {
+                Chapters = (List<Chapter>)result
+            };
         }
 
         //public async Task<>

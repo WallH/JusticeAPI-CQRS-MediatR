@@ -24,7 +24,7 @@ namespace JusticeAPI.Controllers
         }
 
         [HttpPost(Name = "createChapter")]
-        public async Task<IActionResult> Post([FromBody] GetArticleRequestModel request)
+        public async Task<IActionResult> Post([FromBody] PostChapterRequestModel request)
         {
             var response = await _mediator.Send(request);
             return Ok(response);
