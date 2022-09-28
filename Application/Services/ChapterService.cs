@@ -23,6 +23,25 @@ namespace Application.Services
             justiceDbContext = context;
         }
 
+        public async Task DeleteChapter(int id)
+        {
+            var Chapter = await justiceDbContext.Chapters.FindAsync(id);
+            justiceDbContext.Chapters.Remove(Chapter);
+
+            await justiceDbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateChapter(int id, Chapter chapter)
+        {
+            if(id != chapter.Id)
+            {
+                return;
+            }
+            justiceDbContext.Entry(chapter).State = EntityState.Modified;
+
+            await justiceDbContext.SaveChangesAsync();
+        }
+
         public async Task<PostChapterResponseModel> SaveNewChapter(Chapter chapter)
         {
 
